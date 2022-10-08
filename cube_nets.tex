@@ -1,0 +1,286 @@
+\documentclass[10pt]{article}
+
+\usepackage{array,epsfig}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsxtra}
+\usepackage{amsthm}
+\usepackage{color}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Tr}{\text{Tr}}
+\newcommand{\Cl}{\text{Cl}}
+\newcommand{\nm}[1]{||#1||}
+\newcommand{\half}{\frac{1}{2}}
+\setlength{\topmargin}{-.3 in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textheight}{9.in}
+\setlength{\textwidth}{4.5in}
+\pagestyle{empty}
+\begin{document}
+\title{Counting unlabelled nets of n-hypercubes}
+\maketitle
+
+\section{Preliminaries}
+
+A slightly silly calculation inspired by this Youtube video https://www.youtube.com/watch?v=Yq3P-LhlcQo: can we do better than $n \le 10$ for calculating the number of nets of an $n$-dimensional hypercube.
+
+Folded up nets of a labelled $n$-hypercube correspond to spanning trees of the graph on $2d$ vertices where nodes are connected if faces are adjacent i.e. the  octohedral graph on $2n$ vertices. I'll write $G_{2n}$ for this graph and label the  vertices $(1,2,\cdots,n,-1,\cdots,-n)$
+
+
+We can calculate the number of these spanning trees using Kirchoff's theorem[https://en.wikipedia.org/wiki/Kirchhoff\%27s\_theorem]; it turns out that one gets $2^{2d-2}(d-1)^dd^{d-2}$ as the answer. However, many of these nets have some symmetries, so we can't just divide this by the size of the symmetry group of the hypercube [which has a name: the hyperoctohedral group]. So let's pull out Burnside's lemma.
+
+By Burnside's Lemma, the number of unlabelled nets of a hypercube of dimension $n$ is
+  \[\frac{1}{|B_n|}\sum_{\Cl_{B_n}(g)\subseteq B_n}\#\Cl_G(g)\times \#\text{\{nets fixed by $g$\}}\]
+  where $B_n$ is the hyperoctohedral group in $n$ dimensions and we sum over conjugacy classes. $|B_n|= 2^nn!$
+
+  [I'm ignoring the question of whether we can actually unfold these nets in $d-1$ dimensional space with them intersecting themselves; it turns out this is true.]\footnote{For any cycle in $\Z^{n-1}$ and for any direction (wlog left-right) the cycle's edges go along consider the exit and entry point at a connected component of the leftmost edge of the cycle. The 2 $n-1$-cubes just to the right of these entry and exit edges roll up into the same face of the $n$ hypercube, so the net of the hypercube cannot give rise to this cycle. We can also use this to deduce the adjacency graph of the $n-1$-cubes is a tree}
+ 
+ 
+  Labelling the faces $\{\pm 1, \cdots,\pm n\}$ the cycle type of some element of $B_n$ (thinking of it as some permutation of the faces) might be conjugate in $B_n$ to $(1 \cdots k)$ (in which case we also have the cycle $(-1 \cdots -k)$) or $(1 \cdots k -1 \cdots-k)$. Labelling the pair of cycles for the first option $k$ and the second option $-k$ the conjugacy class of an element in $B_n$ is then uniquely determined by a multiset $C_g$ of things in $\{1, \cdots, n,-1,\cdots,-n\}$ whose absolute values add up to $n$. To get the cycle type of our element in $S_{2n}$ we have 2 copies of $i$ for every $i>0$ in $C_g$ and a $2i$ for every $-i$.
+  Write the number of copies of $a$ in $C_g$ as $c_a$
+
+  We can calculate $|\Cl_{B_n}(g)|=|B_n|/|C_{B_n}[g]|$ by calculating the size of the centralizer of $g$. There are $2k$ group elements on $B_k$ which commute with $(1 2 \cdots k)(-1 -2 \cdots -k)$ or $(1 \cdots k-1 \cdots -k)$ (i.e powers of these elements times perhaps inversion about the origin in the first case); these elements for each cycle in $g$ together with $c_a!$ permutations of the cycles of type $a$ generate the centralizer. We have 
+  \[|C_G[g]|= \prod_a c_a!(2|a|)^{c_a}\]
+
+  Any automorphism of a tree of must fix either an edge of a vertex. The shortest way to prove this I can think of is Lefschetz Fixed Point Theorem but if I can I'll find a more elementary way to do it.
+  
+  We'll write $C_{i,a}$ for the $i$th cycle of length $a$ in the action of $g$ on the vertices of the graph $G_{2n}$.
+
+  Consider the cycles $ C_{i_k,a_k},C_{i_{k-1},a_{k-1}} \cdots C_{1,a_0}$ and $a_0 \in \{1,2\}$ we visit when we take the unique path from some element in the graph to either our chosen fixed vertex or the closest endpoint of the fixed edge. We generate the same set of cycles no matter which element of $C_{i_k,a_k}$ we start at, and any final segment of this path must also be a unique path of this kind, so we can only visit each cycle once.
+
+  Labelling the vertices in $C_{i_k, a_k}$ $(v_1, \cdots, v_{a_k})$ and those in $C_{i_{k-1},a_{k-1}}$ ($w_1,\cdots, w_{a_{k-1}}$) any $v$ must connect to a unique $w$ in the tree, and $v_t$ connects to $w_s$ iff $v_{t+1}$ connects to $V_{s+1}$.  So $a_{k-1}$ must divide $a_k$. If $C_{i_k,a_k}$ and $C_{i_{k-1},a_{k-1}}$ do not share the same axes every $w$ is connected to every $v$ there are $a_{k-1}$ ways to arrange this, if they are opposie to each other $v_i$ cannot connect to $-v_i$ but all other $a_{k-1}-1$ possibilities can  be arranged.
+
+  
+
+  For any possible rooted tree with vertices labelled by the $C_{i,a}$ with $C_{0,a_0}$ as the root satisfying these divisibility criteria and for any arrangement among the $a$ or $a-1$ for each ourward edge from $C_{a,i}$ to $C_{b,j}$ we do in fact get a tree that is preserved by $g$.  In the case $a_0=2$ we require the two vertices of $C_{0,a_0}$ to be connected by an edge -- this cycle must come from a $2$ and not a $-1$ in $C_g$.
+
+  (I'm not sure whether there's a usual convention here but here a spanning tree means we can reach everywhere outward from the root.)
+
+\section{Algorithm}
+ We now are ready to present the following algorithm for computing the number of nets of an $n$-hypercube.
+ Write the number of copies of $a$ in $C_g$ as $c_a$
+\begin{itemize}
+\item Iterate over all the $C_g$:
+\item Calculate the following function $\Tr(g)$: the number of trees preserved by the action of $g$ on $G_{2n}$.
+  \begin{itemize}
+  \item $g$ can only fix a vertex if $c_1>0$ if this is the case we then construct a multi-directed graph $H_g$ with vertices labelled by the $C_{i,a}$ with no loops on the cycles of $g$ in $S_{2n}$ with
+    \begin{itemize}
+    \item No edges from $C_{i,a}$ to $C_{j,b}$ if a does not divide $b$.
+    \item $a-1$ edges from $C_{i,a}$ to $C_{j,a}$ if these cycles happen to be opposite to each other
+    \item $a$ edges from $C_{i,a}$ to $C_{j,b}$ otherwise.
+    \end{itemize}
+    We then let $\Tr(g)$ be the number of spanning trees with some 1-cycle as the root, which we can enumerate using Kirchoff's Matrix theorem. In the case where $c_1=1$ and we have two $1$-cycles it happens that $\Tr(g)=0$; it is impossible to connect whichever vertex is the root to the other.
+  \item $g$ can only fix an edge if $C_g$ has at $c_2>1$ copies of $2$ (and no copy of $1$). We construct exactly the same graph and enumerate the number of spanning trees with some $2$-cycle as the root. Unlike in the first case different choices of the $2$-cycles give rise to different trees, so $\Tr(g) = 2c_2$ times this number of spanning trees. No such spanning tree exists if we have an odd cycle, ie if $c_{2i+1} \ne 0$ for some $i \ge 0$.
+  \item In all other cases no tree preserved by $g$ exists and $\Tr(g)=0$
+  \end{itemize}
+\item Calculate the number of conjugacy classes
+  \[|\Cl_{B_n}(g)|=\frac{n!2^n}{\prod_a c_a!(2|a|)^{c_a}}\]
+\item Sum up
+  \[\frac{1}{|B_n|}\sum_{Cl_{B_n}(g) \subseteq B_n}Tr(g)*|\Cl_{B_n}(g)|\]
+\end{itemize}
+
+The number of partitions of $n$ runs as about $e^{\sqrt(n)}$, so we should be able to push this a fair bit further than the much more brute force approach given in the video.
+
+\section{A somewhat faster way to compute $Tr(g)$}
+
+We notice that our spanning tree $T$ for $H_g$ must also be a spanning tree when restricted to the subgraph $H_g[C_{*,<a}]$ on all the vertices corresponding to cycles of size less than $a$ for any $a > a_0$. Further, sufficient and necessary conditions for $T[C_{*,<a+1}]$ to be a tree are
+\begin{itemize}
+\item $T[C_{*,<a}]$ is a spanning tree
+\item $T[C_{*,a}]$ is a forest
+\item Every connected component of  $T[C_{*,a}]$connects exactly once to some $C_{*,b}$ with $b<a, b|a$. Noticably this is not affected by $T[C_{*,<a}]$
+\end{itemize}
+
+We can therefore generate trees in  $H_g[C_{*,<a}]$ and compute $\Tr(g)$ as follows:
+First, we generate $T[C_{*,a}]$.
+For the case $a_0=1$. By Kirchoffs matrix tree the number of trees we can choose from is the determinant of the $2c_1-1 \times 2c_1-1$ matrix
+\[\left(\begin{array}{cccccc}
+2c_1-2&0&-1&\cdots&-1&-1\\
+0&2c_1-2&-1&&-1&-1\\
+-1&-1&2c_1-2&&-1&-1\\
+\vdots&&&\ddots&&\vdots\\
+-1&-1&-1&\cdots&2c_1-2&-1\\
+-1&-1&-1&\cdots&-1&2c_1-2\\
+\end{array}\right)\]
+Our eigenvalues are $c_1-1$ copies of $2c_1-2$ from vectors of the form $e_{2i-1}-e_{2i}$, $c_1-2$ copies of $2c_1$ from vectors of the form $e_{2i-1}+e_{2i}-e_{2i+1}-e_{2i+1}$. Our matrix acts on the vectors orthogonal to this of $e_1+\cdots + e_{2c_1-2}$ and $e_{2c_2-1}$ by
+
+\[\left(\begin{array}{cc}
+2&-2c_1+2\\
+-1&2c_1-2\\
+\end{array}\right)\]
+
+which has determinant $(c_1-1)$. So the determinant we want is
+\[(2c_1-2)^{c_1}(2c_1)^{c_1-2}\]
+
+For the case $a_0=2$ the number of trees we can choose from is the determinant of the $v-1=2c_2+c_1-1 \times v-1$ matrix $M$ with
+
+\[M_{ij} = \left\{\begin{array}{ll}
+2v-3:i=j\le2c_2-1\\
+2v-2:i=j >2c_2-1\\
+-1:i=2k-1,j=2k \text{ or }i=2k,j=2k-1 \text{ with } k \le c_2-1\\
+-2:\text{else}\end{array}\right.\]
+
+which we can compute by a similar method has determinant
+
+\[2^{v-c_2-1}v^{v-c_2-2}(2v-1)^{c_2}\]
+
+Now we consider how to add $H_g[C_{*,a}]$ to an already existing tree $T[C_{*,<a}]$.  $H_g[C_a]$ has $2c_a+c_{-a/2}$ vertices (where we set $c_{-a/2}=0$ if $-a/2$ is non-integer).
+
+There are
+\[p_a = \sum_{b<a;b|a}2bc_b+bc_{-b/2}\]
+possible vertices we can connect each of our connected components in our forest to.
+
+This is equivalent to the problem of finding rooted spanning trees of a graph on $V[H_g[C_a]] \cup \{W\}$ from $W$, where there are $p_a$ connections from $W$ to every vertex in $H_g[C_a]$. Again, to enumerate the ways of doing this, using Kirchoff's matrix tree theorem, we want to find the determinant of the $v=2c_a+c_{-a/2} \times v$ matrix $M$
+\[M_{ij} = \left\{\begin{array}{ll}
+a(v-1)-1+p_a:i=j\le 2c_a\\
+a(v-a)+p_a:i=j >2c_a\\
+-a+1:i=2k-1,j=2k \text{ or }i=2k,j=2k-1 \text{ with }k\le c_a\\
+-a:\text{else}\end{array}\right.\]
+which is
+
+\[p_a(va+p_a)^{v-c_a-1}(va+p_a-1)^{c_a}\].
+
+So, after computing
+
+\[p_a = \sum_{b<a;b|a}2bc_b+bc_{-b/2},\]
+
+we can calculate $\Tr(g)$
+
+If $c_1\ge 2$
+\begin{align*}
+  \Tr(g)&=\\
+  &(2c_1-2)^{c_1}(2c_1)^{c_1-2}\\
+  &\times \prod_{a >1}p_a(a(2c_a+c_{-a/2})+p_a)^{c_{-a/2}+c_a-1}(a(2c_a+c_{-a/2})+p_a-1)^{c_a}\\
+\end{align*}
+
+If $c_1=0, c_2 \ne 0$ and $c_{2i+1}=0$ for $i\ge 0$ (multiplying in the $2c_2$ term):
+\begin{align*}
+  \Tr(g)&=\\
+  &2^{c_2+c_{-1}}c_2(2c_2+c_{-1})^{c_2+c_{-1}-2}(4c_2+2c_{-1}-1)^{c_2}\\
+  &\times\prod_{a >1}p_a(a(2c_a+c_{-a/2})+p_a)^{c_a+c_{-a/2}-1}(a(2c_a+c_{-a/2})+p_a-1)^{c_a}\\
+\end{align*}
+
+
+and in all other cases
+\[\Tr(g)=0\]
+
+\section{Asymptotics}
+
+I believe that the number of nets asymptotes to
+
+\[\frac{c\Tr(e)}{|B_n|} = \frac{c(2n)^{n-2}(2n-2)^{n}}{(2^nn!)}\sim\frac{c}{\sqrt{\pi}}e^{n-1}(2n)^{n-\frac{5}{2}}\]
+for
+\[c= e^{\half(e^{-2}+e^{-4})}\approx 1.07985 \]
+
+I do know the following, which is very suggestive:
+
+For any finite multiset of elements drawn from $\mathbb{Z}^- \cup \mathbb{Z}_{\ge2}$, we have a conjugacy class $Cl_{B_n}[g_n]$ for all large enough $B_n$ where we preserve all other faces of the cube.
+
+Then
+
+\[\lim_{n \to \infty}\frac{\Tr(g_n)\Cl_{B_n}(g_n)}{\Tr(e)} = \frac{e^{-2a_{-1}-4a_2}}{2^{a_{-1}+a_2}a_{-1}!a_{2}!}\]
+
+if $a_i =0$ for all $i \ne 1,-1,2$, and 
+\[\lim_{n \to \infty}\frac{\Tr(g_n)\Cl_{B_n}(g_n)}{\Tr(e)} =  0\]
+
+otherwise. 
+\iffalse
+
+  $2n \ge a(2c_a+c_{-a/2})+p_{a},p_a \le 2n-a(2c_a+c_{-a/2}) \le 2n*(\frac{(2n-2)}{2n})^{2c_a+c{-a/2}}$. So the total from the product coming from everything of size $a$ is bounded above by $(2n-2)^{\# \text{cycles }}$
+
+
+  For the no-1-cycle case, we can get a bound of $n(2n)^{\#\text{cycles}-2} \le (2n-2)^{\#\text{cycles}}-1$ also.
+
+
+  $\Tr(e)/\Tr(g)=(2n-2)^{\#\text{of fewer cycles in } g}*(2n/2n-2)^{n-1-c_1}/(2c_1-2)^{c_1}(2c_1)^{c_1-2}$
+
+\fi
+  
+
+  \section{Implementation/Results}
+  \tiny
+  \texttt{
+    n	12-core-sec	count\\
+1	0.245348930	0\\
+2	0.247266054	1\\
+3	0.239933729	11\\
+4	0.204809188	261\\
+5	0.215048551	9694\\
+6	0.218962192	502110\\
+7	0.231381177	33064966\\
+8	0.244138002	2642657228\\
+9	0.248214006	248639631948\\
+10	0.255265951	26941775019280\\
+11	0.263703346	3306075027570423\\
+12	0.267102241	453373928307505005\\
+13	0.287003278	68734915059053558299\\
+14	0.282397747	11418459384326497964902\\
+15	0.299146890	2062999819948725194529075\\
+16	0.306639671	402798929430911987111828116\\
+17	0.352891445	84526877217018050866911342594\\
+18	0.370954275	18973553064409449260472376235331\\
+19	0.453267574	4536630338860581369328873910626665\\
+20	0.494092702	1151178454966303268991128664243557042\\
+21	0.572003841	308991125227760514842992561654679405221\\
+22	0.615950107	87470525099250663833460093841873159882770\\
+23	0.678905010	26045634993717076980553312324382165496411343\\
+24	0.715851545	8138039298777944270381420460637129863949889849\\
+25	0.786192417	2662347418559335512464065752229073742895672945088\\
+26	0.901782035	910123858978356747439907460726172015072958200977270\\
+27	1.036522388	324511339738064365642213279291353450470816118359891801\\
+28	1.220845699	120481160791478999426315146189400115675011814497034635659\\
+29	1.498744726	46504054970702540514490803271996535383294449909522164391772\\
+30	1.835273504	18634489098129433985717877835265225648570981594218150923733739\\
+31	2.262707710	7741345283646475203134474681560988395035942645169952172520489471\\
+32	2.884032011	3330006555730969930537529418233455396232698509778309574544827727149\\
+33	3.628467798	1481484103556207682260645284167472578981211726936064595468171230772673\\
+34	4.667023897	680923577203003538320164072110804759796243431710220785348660674010878904\\
+35	6.072049140	323001869626771415312217567738355146979882994654113136049423924452464942105\\
+36	7.824763298	157979135649178998460657860482578441120545283945409286757466274566093670595921\\
+37	10.06048536	79595729357789331242842448305241224861124526102437745227495817092435186975024267\\
+38	13.25435042	41276693261034587151826907310948478138424249720068920404024446229908796073425199790\\
+39	17.12822222	22013823546191742833362281648474861974610974137557505000269854773610459107925196193907\\
+40	61.93382978	12065096355048346536818820738749579944341201387473132772386095852464893117668967530754966\\
+41	88.68573927	6790434298681964215505401845900584952789988058295868395478393488951125206133694619196794912\\
+42	113.5691266	3921918447001902223717885997968972948788608034932410358786151853364183048995424656807445791633\\
+43	124.8940184	2323012311226145312347594415017432427981472606202815034109215674419141796735889360833761580874753\\
+44	183.4866034	1410223362601785662117780474838057052778136612869746464784684038606502784073668403348927278916135717\\
+45	254.7821242	876903997273002848141629737182074425808493744880770075338491731935264218125309450971504854303812439153\\
+46	336.4933066	558213294883204527688307011514608082164801699576263453060198803355059934068031318862399732886670908388252\\
+47	426.2810008	363579695762006637160509668830060896500204148918326317015845070007630607740581323014299062003571528726987098\\
+48	492.6009881	242174322793974697560218900102129442872102165411932501441660945353069570449974546713473328062705725703531228837\\
+49	585.9692811	164881902098375075140994297329613864641746237886306508456211238060446167008556935324634051797669588039551871944573\\
+50	832.6709125	114691379257898625556378026423076874927705301601621880065204264939605970749687741454793918669008526851263080777800273\\
+51	1335.702688	81471634149892526939012783054042477692293225987224920737292189156019641417849772301841520858872847244400742157887780522\\
+52	1400.996340	59076247551720132545304587909105741371706791581301756719998496386226960127826019027082511173063164973868091449604726571966\\
+53	1619.876396	43708978744322026083419758441507705238493833266466407484256796900363462821244054421515782665122998881702750121969170579953982\\
+54	1058.737107	32984296347254477022282999704705722214832772246484744387775464888029861249009524821481429635423102851448359948325604000528169151\\
+55	2382.865324	25377963723643442772143045366497077132437924847770919352959035885084873469554941978654692041745234555867871518621654341359811177827\\
+56	<multi-run>	19900306230105022476644502712584630957479913576838888284746493837759449414122514046557271804366113526756553342974724210374551125242173\\
+57	4104.906018	15898734898873222754993398548300182434910550612257122460628235123589493749271602595997708375108959413543436918479762600502071431140156773\\
+58	<multi-run>	12936511643660858581152018985371950798305527871123636294435717585895325669423304445920700391891366382322642626049335893752805802868036069094\\
+59	5986.065509	10717189181647406951334988864115186078460732842378632838749880773894245135930109456067491780640513509258263193560591166470099136962594525132236\\
+60	4145.372992	9036828101643777639682104557968741077989491771742137584649806754058784495651263789541754847014364299652770882539747244407311068085536702687353913\\
+61	9816.098506	7753354358059862266543614250918775511623414276996064187846610756082654046468945691885316707297550000069672817501432365428250445100561608847498586167\\
+62	5010.182166	6766644043992929884138381034883315367776761219767697291564706284257607427208874378168905132777066741269461820701662678579233070636613133891904935114580\\
+63	10417.50762	6005414760286056397144713756083616937734268467074902203746477426034911753772218612236564230844393034091212683077266873402857424584598328119930029872072193\\
+64	6862.840989	5418494485796815608435446923799451914790032979545865200035508661015893870807812321300042313457774107373874646899504867634056626782370348898159608472711949028\\
+65	8522.143324	4968943710959275865693839466376555793315290505585045453282807561394132926073527716311016796145353299547006935824846772858127264279658996887760271963095406823157\\
+66	10596.95078	4630062889803190702695864213046180003287687544338098107985402708381352198903795391864058259865554609609019299398779904963640439420227405076641935112791704207403286\\
+67	24979.27256	4382663830969780833852333333014697756766793195660554880898002642688991915255300772048201128628191308101602307745766939985668431993186810477772992071051178415749323451\\
+    }
+  \normalsize
+
+
+
+\end{document}
+
+
+
+
+
+
+
+  
