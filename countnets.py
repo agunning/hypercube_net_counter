@@ -40,6 +40,7 @@ def count_trees_cycle_size(sp,unsp,u,v,l=0):
     else:
         return u*(n*u)**(n-2-sp)*(n*u-2)**sp
 def count_trees2(partst):
+    #counts nets preserved by some symmetry whose conjugacy class is given by partst
     n=partst[0].shape[0]
     if partst[0][0]+partst[0][1]==0:
             return 0
