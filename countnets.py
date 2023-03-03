@@ -3,6 +3,9 @@ import numpy as np
 import scipy.special
 import sympy
 def gen_partitions(n,m=None,xt=None,add=None):
+    #lists the partitions of n
+    #a partition is an array P of length n where P[0] is the number of 1,s P[1] is the number of 2s, etc.
+    #everything else here is auxiliary/not going to be called later to make the recursion work
     if m is None:
         m=n
     if xt is None:
@@ -18,12 +21,13 @@ def gen_partitions(n,m=None,xt=None,add=None):
         l+=gen_partitions(n-i,i,xt,nadd)
     return l
 def gen_partitions_st(n):
+    #lists the partitions of n, where there are red+blue objects of size 1, 2 of size 2, etc. These are in bijection with conjugacy classes in the octohedral group.
     l=[]
     for i in range(0,n+1):
         l+=[(v,u) for u in gen_partitions(i,n,n) for v in gen_partitions(n-i,n,n)]
     return  l
 def count_centralizer_st(partst):
-    
+    #lists the size of the centralizer for any conjugacy class given by the output of gen_partitions_st
     n=partst[0].shape[0]
     t=1
     for i in range(0,n):
@@ -82,6 +86,7 @@ def count_trees2(partst):
             prod*=count_trees_cycle_size(sp,unsp,i+1,int(divsum[i]))
     return prod
 def count_nets2(n):
+    #counts the number of nets of an nd hypercube
     tot=0
     bignum = 2**n*math.factorial(n)
     for x in gen_partitions_st(n):
